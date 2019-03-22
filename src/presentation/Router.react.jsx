@@ -1,7 +1,7 @@
 import React from "react";
 import HomeView from "./views/HomeView.react";
-import QuestionnaireView from "./views/QuestionnaireView.react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import QuestionnaireViewContainer from "../redux/containers/QuestionnaireViewContainer";
 
 const RouterComponent = () => {
   return (
@@ -9,7 +9,7 @@ const RouterComponent = () => {
       <Router>
         <Switch>
           <Route path="/" exact component={HomeView} />
-          <Route path="/start" exact component={QuestionnaireView} />
+          <Route path="/start" exact component={QuestionnaireViewContainer} />
         </Switch>
       </Router>
     </div>
