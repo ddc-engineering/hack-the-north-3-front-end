@@ -5,7 +5,6 @@ const initialState = { ready: false };
 const questionReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.START_QUESTIONNAIRE:
-      console.log(action.payload);
       return { ...state, ready: true, pageView: action.payload.pageView };
     default:
       return state;

@@ -8,9 +8,6 @@ export default class RadioQuestion extends React.Component {
       renderedOptions.push(
         <div className="govuk-radios__item">
           <input
-            onClick={event => {
-              console.log(event.target);
-            }}
             className="govuk-radios__input"
             id={id}
             name={name}
