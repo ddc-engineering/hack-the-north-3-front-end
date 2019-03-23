@@ -1,21 +1,22 @@
 import { connect } from "react-redux";
-import QuestionnaireView from "../../presentation/views/QuestionnaireView.react";
 import { startQuestionnaire } from "../actions/questionActions";
+import HomeView from "../../presentation/views/HomeView.react";
+import { withRouter } from "react-router-dom";
 
 const mapStateToProps = state => {
   return {
-    pageView: state.question.pageView,
-    ready: state.question.ready
+    questionnaireReady: state.question.ready
   };
 };
-
 const mapDispatchToProps = dispatch => {
   return {
     startQuestionnaire: () => dispatch(startQuestionnaire())
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(QuestionnaireView);
+export default withRouter(
+  connect(
+    null,
+    mapDispatchToProps
+  )(HomeView)
+);

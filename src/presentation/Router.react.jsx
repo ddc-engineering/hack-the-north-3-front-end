@@ -1,16 +1,15 @@
 import React from "react";
-import HomeView from "./views/HomeView.react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import QuestionnaireViewContainer from "../redux/containers/QuestionnaireViewContainer";
+import HomeViewContainer from "../redux/containers/HomeViewContainer";
+import history from "../history";
 
 const RouterComponent = () => {
   return (
     <div className="govuk-width-container">
-      <Router>
-        <Switch>
-          <Route path="/" exact component={HomeView} />
-          <Route path="/start" exact component={QuestionnaireViewContainer} />
-        </Switch>
+      <Router history={history}>
+        <Route path="/" exact component={HomeViewContainer} />
+        <Route path="/start" exact component={QuestionnaireViewContainer} />
       </Router>
     </div>
   );

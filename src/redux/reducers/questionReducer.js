@@ -1,11 +1,12 @@
 import * as types from "../constants/actionTypes";
 
-const initialState = {};
+const initialState = { ready: false };
 
 const questionReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.START_QUESTIONNAIRE:
-      return { ...state, question: action.payload };
+      console.log(action.payload);
+      return { ...state, ready: true, pageView: action.payload.pageView };
     default:
       return state;
   }
