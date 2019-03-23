@@ -1,8 +1,14 @@
 import React from "react";
 
 export default class RadioQuestion extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      entered: false
+    };
+  }
   renderItems(options) {
-    const { onSelect, name } = this.props;
+    const { changeInput, name } = this.props;
     return options.reduce((renderedOptions, option) => {
       const { id, value, text, hint } = option;
       renderedOptions.push(
@@ -12,7 +18,12 @@ export default class RadioQuestion extends React.Component {
             id={id}
             name={name}
             type="radio"
+            required
             value={value}
+            onChange={() => {
+              changeInput(name, value);
+              this.setState({ entered: false });
+            }}
           />
           <label className="govuk-label govuk-radios__label" for={id}>
             {text}

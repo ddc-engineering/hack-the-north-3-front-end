@@ -3,6 +3,7 @@ import APIEndpoints from "../constants/endpoints";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import history from "../../history";
+import qs from "querystring";
 
 const questionnaireStartEvent = payload => {
   const cookies = new Cookies();
@@ -11,6 +12,50 @@ const questionnaireStartEvent = payload => {
   return { type: types.START_QUESTIONNAIRE, payload };
 };
 
+const nextQuestion = payload => {
+  return { type: types.NEXT_QUESTION, payload };
+};
+
+export const respondToApi = response => {
+  const cookies = new Cookies();
+  const sessionId = cookies.get("session-cookie");
+  return dispatch => {
+    axios
+      .post(
+        `${APIEndpoints.response}`,
+        JSON.stringify({ ...response, sessionId }),
+        {
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      )
+      .then(response => {
+        nextQuestion(response.data);
+      })
+      .catch(error => console.error(error));
+  };
+};
+
+export const restoreSession = sessionId => {
+  return dispatch => {
+    axios(`${APIEndpoints.restoreSession}?sessionId=${sessionId}`, {
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => {
+        dispatch(questionnaireStartEvent(response.data));
+      })
+      .catch(() => {
+        const cookies = new Cookies();
+        cookies.remove("session-cookie");
+        window.location.href = "/";
+      });
+  };
+};
 export const startQuestionnaire = () => {
   return dispatch => {
     axios(APIEndpoints.start, {

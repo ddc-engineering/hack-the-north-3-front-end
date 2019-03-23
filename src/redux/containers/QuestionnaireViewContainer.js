@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import QuestionnaireView from "../../presentation/views/QuestionnaireView.react";
-import { startQuestionnaire } from "../actions/questionActions";
+import { restoreSession, respondToApi } from "../actions/questionActions";
 
 const mapStateToProps = state => {
   return {
@@ -11,7 +11,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    startQuestionnaire: () => dispatch(startQuestionnaire())
+    respondToApi: response => dispatch(respondToApi(response)),
+    restoreSession: sessionId => dispatch(restoreSession(sessionId))
   };
 };
 
