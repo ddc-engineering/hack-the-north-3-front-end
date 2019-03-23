@@ -2,6 +2,7 @@ import React from "react";
 import CheckboxQuestion from "../CheckboxQuestion.react";
 import RadioQuestion from "../RadioQuestion.react";
 import Cookie from "universal-cookie";
+import BinaryQuestion from "../questions/BinaryQuestion.react";
 
 export default class QuestionnaireView extends React.Component {
   constructor() {
@@ -11,22 +12,26 @@ export default class QuestionnaireView extends React.Component {
   }
   onSubmitHandler(event) {
     event.preventDefault();
-    const { respondToApi } = this.props;
-    respondToApi(this.state);
+    const { respondToApi, pageView } = this.props;
+    const { answer_id } = this.state;
+    respondToApi({ ...this.state, question_id: pageView.id, answer_id });
   }
-  handleChange(name, value) {
-    this.setState({ name, value });
+  handleChange(id) {
+    this.setState({ answer_id: id });
   }
-  componentDidMount() {
-    const cookie = new Cookie();
-    const sessionId = cookie.get("session-cookie");
-    if (sessionId) {
-      const { restoreSession } = this.props;
-      restoreSession(sessionId);
-    }
-  }
+  // componentDidMount() {
+  //   const cookie = new Cookie();
+  //   const sessionId = cookie.get("session-cookie");
+  //   if (sessionId) {
+  //     const { restoreSession } = this.props;
+  //     restoreSession(sessionId);
+  //   }
+  // }
   renderQuestionContent() {
     const { pageView } = this.props;
+    if (!pageView.questions) {
+      return null;
+    }
     return pageView.questions.reduce((returnQuestions, questionData) => {
       switch (questionData.type) {
         case "checkbox":
@@ -37,6 +42,8 @@ export default class QuestionnaireView extends React.Component {
             <RadioQuestion {...questionData} changeInput={this.handleChange} />
           );
           return returnQuestions;
+        case "binary":
+          returnQuestions.push(<BinaryQuestion {...questionData} />);
         default:
           return returnQuestions;
       }
@@ -47,7 +54,17 @@ export default class QuestionnaireView extends React.Component {
     if (!ready) {
       return (
         <div className="question-container">
-          <h2 className="govuk-heading-l">Waiting for Questionnaire...</h2>
+          <a href="/" draggable="false" className="govuk-button">
+            Back
+          </a>
+          <h2 className="govuk-heading-l">Loading...</h2>
+          <p className="govuk-body-l">
+            If this page is stuck, try reloading the page.
+          </p>
+          <p className="govuk-body">
+            If this does not fix the problem, try clicking the back button and
+            starting again.
+          </p>
         </div>
       );
     } else {
@@ -62,9 +79,11 @@ export default class QuestionnaireView extends React.Component {
             <div className="govuk-form-group margin-top-form">
               {this.renderQuestionContent()}
             </div>
-            <button type="submit" class="govuk-button">
-              Continue
-            </button>
+            {pageView.questions[0].type === "binary" ? null : (
+              <button type="submit" class="govuk-button">
+                Continue
+              </button>
+            )}
           </div>
         </form>
       );

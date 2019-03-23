@@ -1,39 +1,46 @@
 import React from "react";
 
 export default class CheckboxQuestion extends React.Component {
-  renderInputs(options) {
-    return options.reduce((returnData, singleOption) => {
-      returnData.push(
-        <div class="govuk-checkboxes__item">
+  renderCheckboxes(options) {
+    return options.reduce((renderedCheckboxes, data) => {
+      renderedCheckboxes.push(
+        <div className="govuk-checkboxes__item">
           <input
-            class="govuk-checkboxes__input"
-            id={singleOption.id}
-            name={singleOption.name}
+            className="govuk-checkboxes__input"
+            id={data.id}
+            name={data.name}
             type="checkbox"
-            value={singleOption.value}
+            value={data.value}
           />
-          <label
-            class="govuk-label govuk-checkboxes__label"
-            for={singleOption.id}
-          >
-            {singleOption.text}
+          <label className="govuk-label govuk-checkboxes__label" for={data.id}>
+            {data.text}
           </label>
+          {data.hint ? (
+            <span
+              id={`${data.id}__hint`}
+              className="govuk-hint govuk-checkboxes__hint"
+            >
+              {data.hint}
+            </span>
+          ) : null}
         </div>
       );
-      return returnData;
+      return renderedCheckboxes;
     }, []);
   }
   render() {
-    const { data } = this.props;
+    const { title, hint, options } = this.props;
     return (
-      <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h1 class="govuk-fieldset__heading">{data.title}</h1>
+      <fieldset className="govuk-fieldset" required>
+        <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h1 className="govuk-fieldset__heading">{title}</h1>
         </legend>
-        <span id="waste-hint" class="govuk-hint">
-          Select all that apply.
-        </span>
-        <div class="govuk-checkboxes">{this.renderInputs(data.options)}</div>
+        {hint ? (
+          <span id="nationality-hint" className="govuk-hint">
+            {hint}
+          </span>
+        ) : null}
+        <div className="govuk-checkboxes">{this.renderCheckboxes(options)}</div>
       </fieldset>
     );
   }

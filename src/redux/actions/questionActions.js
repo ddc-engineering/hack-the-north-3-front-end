@@ -3,11 +3,10 @@ import APIEndpoints from "../constants/endpoints";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import history from "../../history";
-import qs from "querystring";
 
 const questionnaireStartEvent = payload => {
   const cookies = new Cookies();
-  cookies.set("session-cookie", payload.sessionId);
+  cookies.set("session-cookie", payload.sessionId, { path: "/" });
   history.push("/start");
   return { type: types.START_QUESTIONNAIRE, payload };
 };
@@ -32,7 +31,7 @@ export const respondToApi = response => {
         }
       )
       .then(response => {
-        nextQuestion(response.data);
+        dispatch(nextQuestion(response.data));
       })
       .catch(error => console.error(error));
   };
@@ -50,8 +49,6 @@ export const restoreSession = sessionId => {
         dispatch(questionnaireStartEvent(response.data));
       })
       .catch(() => {
-        const cookies = new Cookies();
-        cookies.remove("session-cookie");
         window.location.href = "/";
       });
   };

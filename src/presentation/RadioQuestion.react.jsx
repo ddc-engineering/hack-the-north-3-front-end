@@ -1,12 +1,6 @@
 import React from "react";
 
 export default class RadioQuestion extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      entered: false
-    };
-  }
   renderItems(options) {
     const { changeInput, name } = this.props;
     return options.reduce((renderedOptions, option) => {
@@ -21,8 +15,7 @@ export default class RadioQuestion extends React.Component {
             required
             value={value}
             onChange={() => {
-              changeInput(name, value);
-              this.setState({ entered: false });
+              changeInput(id);
             }}
           />
           <label className="govuk-label govuk-radios__label" for={id}>
@@ -38,6 +31,7 @@ export default class RadioQuestion extends React.Component {
   }
   render() {
     const { inline, title, hint, options } = this.props;
+    console.log(this.props);
     return (
       <fieldset className="govuk-fieldset" aria-describedby="changed-name-hint">
         <legend className="govuk-fieldset__legend govuk-fieldset__legend--m">
